@@ -1,6 +1,7 @@
 import { fastify } from 'fastify';
 import { routes } from "./routes";
 import { logger } from './utils/logger';
+import { httpLogger } from "./plugins/http-logger";
 import { fastifySwagger } from "@fastify/swagger";
 import { fastifySwaggerUi } from "@fastify/swagger-ui";
 import { validatorCompiler, serializerCompiler, ZodTypeProvider, jsonSchemaTransform } from 'fastify-type-provider-zod';
@@ -12,8 +13,10 @@ async function start() {
 
   server.setValidatorCompiler(validatorCompiler)
   server.setSerializerCompiler(serializerCompiler)
-
+  
   await server.register(cors)
+  await server.register(routes)
+  await server.register(httpLogger)
   await server.register(fastifySwagger, {
     openapi: {
       openapi: '3.1.1',
@@ -27,7 +30,6 @@ async function start() {
   await server.register(fastifySwaggerUi, {
     routePrefix: '/docs',
   })
-  await server.register(routes)
 
   await server.listen({
     host: '0.0.0.0',
