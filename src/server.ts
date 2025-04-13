@@ -1,7 +1,8 @@
-import { fastify } from 'fastify'
-import { fastifySwagger } from "@fastify/swagger"
+import { fastify } from 'fastify';
+import { routes } from "./routes";
+import { fastifySwagger } from "@fastify/swagger";
 import { fastifySwaggerUi } from "@fastify/swagger-ui";
-import cors from '@fastify/cors'
+import cors from '@fastify/cors';
 
 const server = fastify({ logger: true })
 
@@ -14,12 +15,13 @@ async function start() {
       info: {
         title: 'Reservation API',
         version: '0.1.0',
-      }
+      },
     }
   })
   await server.register(fastifySwaggerUi, {
     routePrefix: '/docs',
   })
+  await server.register(routes)
 
   await server.listen({
     host: '0.0.0.0',
