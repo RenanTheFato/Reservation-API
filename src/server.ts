@@ -1,4 +1,6 @@
 import { fastify } from 'fastify'
+import { fastifySwagger } from "@fastify/swagger"
+import { fastifySwaggerUi } from "@fastify/swagger-ui";
 import cors from '@fastify/cors'
 
 const server = fastify({ logger: true })
@@ -6,6 +8,18 @@ const server = fastify({ logger: true })
 async function start() {
 
   await server.register(cors)
+  await server.register(fastifySwagger, {
+    openapi: {
+      openapi: '3.1.1',
+      info: {
+        title: 'Reservation API',
+        version: '0.1.0',
+      }
+    }
+  })
+  await server.register(fastifySwaggerUi, {
+    routePrefix: '/docs',
+  })
 
   await server.listen({
     host: '0.0.0.0',
