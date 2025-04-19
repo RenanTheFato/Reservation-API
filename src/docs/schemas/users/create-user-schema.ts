@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const createUserSchema = {
-  tags: ["user"],
+  tags: ["user", "POST"],
   summary: "Register new user",
   description: "Creates a new user account with validated credentials.",
   body: z.object({
@@ -33,9 +33,9 @@ export const createUserSchema = {
       code: z.string(),
       error: z.string(),
       message: z.string(),
-    }),
+    }).describe("Body validation failed."),
     409: z.object({
       error: z.string()
-    }).describe("User already exists or service error")
+    }).describe("User already exists or service error.")
   }
 }
