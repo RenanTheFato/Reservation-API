@@ -21,6 +21,15 @@ async function start() {
         title: 'Reservation API',
         version: '0.1.0',
       },
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+          },
+        },
+      },
     },
     transform: jsonSchemaTransform,
   })
