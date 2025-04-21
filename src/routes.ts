@@ -6,6 +6,8 @@ import { createUserSchema } from "./docs/schemas/users/create-user-schema";
 import { findUserSchema } from "./docs/schemas/users/get-user-schema";
 import { AuthorizationUserController } from "./controllers/users/authorization-user-controller";
 import { authorizationUserSchema } from "./docs/schemas/users/authorization-user-schema";
+import { DeleteUserController } from "./controllers/users/delete-user-controller";
+import { authentication } from "./middlewares/auth-middleware";
 
 export async function routes(fastify : FastifyTypedInstance){
   fastify.post("/create-user", { schema: createUserSchema }, async(req: FastifyRequest, rep: FastifyReply) =>{
@@ -18,5 +20,9 @@ export async function routes(fastify : FastifyTypedInstance){
 
   fastify.post("/authorization-user", { schema: authorizationUserSchema }, async(req: FastifyRequest, rep: FastifyReply) =>{
     return new AuthorizationUserController().handle(req, rep)
+  })
+
+  fastify.delete("/delete-user", { preHandler: [authentication] }, async(req: FastifyRequest, rep: FastifyReply) =>{
+    return new DeleteUserController().handle(req, rep)
   })
 }

@@ -1,10 +1,10 @@
 import 'fastify';
 
-declare module 'fastify' {
-  interface FastifyRequest {
-    startTime?: number,
-  }
-}
+// declare module 'fastify' {
+//   interface FastifyRequest {
+//     startTime?: number,
+//   }
+// }
 
 declare module 'fastify' {
   export interface FastifyRequest{
