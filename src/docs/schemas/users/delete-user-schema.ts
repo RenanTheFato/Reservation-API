@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const deleteUserSchema = {
-  tags: ["user", "DELETE"],
+  tags: ["user"],
   description: "Delete a registered user by their ID",
   summary: "Delete a unique user by thier ID",
   security: [

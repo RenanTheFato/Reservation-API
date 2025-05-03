@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const authorizationUserSchema = {
-  tags: ["user", "auth", "POST"],
+  tags: ["user", "auth"],
   description: "",
   summary: "Performs user authentication.",
   body: z.object({

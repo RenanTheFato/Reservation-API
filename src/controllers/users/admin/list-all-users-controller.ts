@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { ListAllUsersService } from "../../services/admin/list-all-users-service";
-import { logger } from "../../utils/logger";
+import { ListAllUsersService } from "../../../services/users/admin/list-all-users-service";
+import { logger } from "../../../utils/logger";
 
 export class ListAllUsersController{
   async handle(req: FastifyRequest, rep: FastifyReply){

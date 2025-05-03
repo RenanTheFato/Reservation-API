@@ -9,7 +9,7 @@ import { authorizationUserSchema } from "./docs/schemas/users/authorization-user
 import { DeleteUserController } from "./controllers/users/delete-user-controller";
 import { authentication } from "./middlewares/auth-middleware";
 import { deleteUserSchema } from "./docs/schemas/users/delete-user-schema";
-import { ListAllUsersController } from "./controllers/admin/list-all-users-controller";
+import { ListAllUsersController } from "./controllers/users/admin/list-all-users-controller";
 import { checkAdmin } from "./middlewares/admin-middleware";
 
 export async function routes(fastify : FastifyTypedInstance){

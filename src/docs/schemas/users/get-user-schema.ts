@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const findUserSchema = {
-  tags: ["user", "GET"],
+  tags: ["user"],
   description: "Find a registered user by their ID",
   summary: "Find a unique user by thier ID",
   querystring: z.object({

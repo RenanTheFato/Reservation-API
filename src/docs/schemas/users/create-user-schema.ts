@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const createUserSchema = {
-  tags: ["user", "POST"],
+  tags: ["user"],
   summary: "Register new user",
   description: "Creates a new user account with validated credentials.",
   body: z.object({
