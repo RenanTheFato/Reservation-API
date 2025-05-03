@@ -12,6 +12,7 @@ import { deleteUserSchema } from "./docs/schemas/users/delete-user-schema";
 import { ListAllUsersController } from "./controllers/users/admin/list-all-users-controller";
 import { checkAdmin } from "./middlewares/admin-middleware";
 import { CreateRoomController } from "./controllers/rooms/admin/create-room-controller";
+import { createRoomSchema } from "./docs/schemas/admin/create-room-schema";
 
 export async function routes(fastify : FastifyTypedInstance){
   fastify.post("/create-user", { schema: createUserSchema }, async(req: FastifyRequest, rep: FastifyReply) =>{
@@ -34,7 +35,7 @@ export async function routes(fastify : FastifyTypedInstance){
     return new ListAllUsersController().handle(req, rep)
   })
 
-  fastify.post("/admin/create-room", { preHandler: [authentication, checkAdmin] }, async(req: FastifyRequest, rep:FastifyReply) =>{
+  fastify.post("/admin/create-room", { preHandler: [authentication, checkAdmin], schema: createRoomSchema }, async(req: FastifyRequest, rep:FastifyReply) =>{
     return new CreateRoomController().handle(req, rep)
   })
 }
