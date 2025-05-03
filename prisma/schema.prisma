@@ -24,7 +24,7 @@ model Users {
 model Rooms {
   id          String     @id @default(uuid())
   name        String     @unique
-  description String
+  description String     
   location    String
   status      RoomStatus @default(AVAILABLE)
   createdAt   DateTime   @default(now())

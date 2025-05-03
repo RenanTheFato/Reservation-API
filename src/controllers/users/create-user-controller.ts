@@ -6,7 +6,7 @@ import { CreateUserService } from "../../services/users/create-user-service";
 
 export class CreateUserController {
   async handle(req: FastifyRequest, rep: FastifyReply) {
-    const validadeSchema = z.object({
+    const validateUserSchema = z.object({
       email: z.string()
         .email({ message: "The value entered isn't an e-mail or the e-mail is invalid." }),
       password: z.string()
@@ -23,10 +23,10 @@ export class CreateUserController {
       path: ["confirm_password"],
     })
 
-    const { email, password, name } = req.body as z.infer<typeof validadeSchema>
+    const { email, password, name } = req.body as z.infer<typeof validateUserSchema>
 
     try {
-      validadeSchema.parse(req.body)
+      validateUserSchema.parse(req.body)
     } catch (error) {
       if (error instanceof z.ZodError) {
         const errors = error.errors.map((err) =>({
@@ -35,7 +35,7 @@ export class CreateUserController {
           path: err.path.join("/"),
         }))
 
-        logger.error(`Validation error when creating a user: Data does not match the requirements.`)
+        logger.error("Validation error when creating a user: Data does not match the requirements.")
         return rep.status(400).send({ statusCode: 400, code: errors[0].code, error: "Bad Request", message: errors[0].message })
       }
     }
