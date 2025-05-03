@@ -13,6 +13,7 @@ import { ListAllUsersController } from "./controllers/users/admin/list-all-users
 import { checkAdmin } from "./middlewares/admin-middleware";
 import { CreateRoomController } from "./controllers/rooms/admin/create-room-controller";
 import { createRoomSchema } from "./docs/schemas/admin/create-room-schema";
+import { FindRoomController } from "./controllers/rooms/find-room-controller";
 
 export async function routes(fastify : FastifyTypedInstance){
   fastify.post("/create-user", { schema: createUserSchema }, async(req: FastifyRequest, rep: FastifyReply) =>{
@@ -29,6 +30,10 @@ export async function routes(fastify : FastifyTypedInstance){
 
   fastify.delete("/delete-user", { preHandler: [authentication], schema: deleteUserSchema}, async(req: FastifyRequest, rep: FastifyReply) =>{
     return new DeleteUserController().handle(req, rep)
+  })
+  
+  fastify.get("/find-room", async(req: FastifyRequest, rep:FastifyReply) =>{
+    return new FindRoomController().handle(req, rep)
   })
 
   fastify.get("/admin/list-all-users", { preHandler: [authentication, checkAdmin] }, async(req: FastifyRequest, rep:FastifyReply) =>{

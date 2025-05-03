@@ -6,5 +6,4 @@ export interface Room {
   status: string,
   createdAt: Date,
   updatedAt: Date,
-
 }
