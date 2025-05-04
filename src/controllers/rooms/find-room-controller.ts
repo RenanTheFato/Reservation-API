@@ -7,6 +7,7 @@ export class FindRoomController{
   async handle(req: FastifyRequest, rep: FastifyReply) {
     const STATUS_LIST: string[] = ['AVAILABLE', 'IN_USE', 'MAINTENANCE', 'INTERDICTED', 'UNAVAILABLE']
     const { status } = req.query as Pick<Room, 'status'>
+    const { name, location } = req.query as Partial<Pick<Room, 'name' | 'location'>>
 
     if (!status) {
       logger.error("Missing status on req.query")
@@ -20,7 +21,7 @@ export class FindRoomController{
 
     try {
       const findService = new FindRoomService()
-      const rooms = await findService.execute({ status })
+      const rooms = await findService.execute({ status, name, location })
       logger.success("Room(s) finded")
       rep.status(200).send({ rooms })
     } catch (error: any) {

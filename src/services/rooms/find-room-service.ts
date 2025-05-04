@@ -3,14 +3,22 @@ import { Room } from "../../interfaces/room-interface";
 import { logger } from "../../utils/logger";
 
 export class FindRoomService {
-  async execute({ status }: Pick<Room, 'status'>) {
+  async execute({ status, name, location }: Partial<Pick<Room, 'status' | 'name' | 'location'>>) {
     const roomsFinded = await prisma.rooms.findMany({
       where: {
-        status: status
-      }
+        status: status,
+        ...(name && {
+          name: {
+            contains: name, mode: "insensitive",
+          }
+        }),
+        ...(location && {
+          location: {
+            contains: location, mode: "insensitive",
+          },
+        }),
+      },
     })
-
-    console.log(roomsFinded)
 
     if (roomsFinded.length === 0) {
       logger.warn("Room(s) not found")
