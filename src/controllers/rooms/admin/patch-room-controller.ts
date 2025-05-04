@@ -57,7 +57,6 @@ export class PatchRoomController {
     }
 
     try {
-
       const admin = {
         adminId: req.user.id,
         adminName: req.user.name,
