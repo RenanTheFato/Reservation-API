@@ -1,4 +1,4 @@
-enum Status {
+export enum Status {
   AVAILABLE = "AVAILABLE",
   IN_USE = "IN_USE",
   MAINTENANCE = "MAINTENANCE",

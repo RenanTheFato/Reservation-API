@@ -15,6 +15,7 @@ import { CreateRoomController } from "./controllers/rooms/admin/create-room-cont
 import { createRoomSchema } from "./docs/schemas/admin/create-room-schema";
 import { FindRoomController } from "./controllers/rooms/find-room-controller";
 import { findRoomSchema } from "./docs/schemas/rooms/find-room-schema";
+import { PatchRoomController } from "./controllers/rooms/admin/patch-room-controller";
 
 export async function routes(fastify : FastifyTypedInstance){
   fastify.post("/create-user", { schema: createUserSchema }, async(req: FastifyRequest, rep: FastifyReply) =>{
@@ -43,5 +44,9 @@ export async function routes(fastify : FastifyTypedInstance){
 
   fastify.post("/admin/create-room", { preHandler: [authentication, checkAdmin], schema: createRoomSchema }, async(req: FastifyRequest, rep:FastifyReply) =>{
     return new CreateRoomController().handle(req, rep)
+  })
+
+  fastify.patch("/admin/patch-room/:id", { preHandler: [authentication, checkAdmin] }, async(req: FastifyRequest, rep:FastifyReply) =>{
+    return new PatchRoomController().handle(req, rep)
   })
 }
