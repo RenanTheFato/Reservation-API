@@ -11,12 +11,12 @@ export class FindRoomController{
 
     if (!status) {
       logger.error("Missing status on req.query")
-      return rep.status(400).send({ message: "The status is missing" })
+      return rep.status(400).send({ error: "The status is missing" })
     }
 
     if (!STATUS_LIST.includes(status)) {
       logger.warn("The value entered is not supported")
-      return rep.status(400).send({ message: "The status entered is not supported, select one of the status list", STATUS_LIST })
+      return rep.status(400).send({ error: "The status entered is not supported, select one of the status list", STATUS_LIST })
     }
 
     try {
