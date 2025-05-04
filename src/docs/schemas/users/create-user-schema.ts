@@ -2,8 +2,8 @@ import z from "zod";
 
 export const createUserSchema = {
   tags: ["user"],
-  summary: "Register new user",
-  description: "Creates a new user account with validated credentials.",
+  summary: "Create a new user account",
+  description: "Registers a new user by validating the provided credentials and storing them in the system.",
   body: z.object({
     email: z.string()
       .email({ message: "The value entered isn't an e-mail or the e-mail is invalid." })
@@ -27,15 +27,15 @@ export const createUserSchema = {
   response: {
     201: z.object({
       message: z.string(),
-    }).describe("User created successfully."),
+    }).describe("User account created successfully."),
     400: z.object({
       statusCode: z.number(),
       code: z.string(),
       error: z.string(),
       message: z.string(),
-    }).describe("Body validation failed."),
+    }).describe("Invalid input data. One or more fields failed validation."),
     409: z.object({
       error: z.string()
-    }).describe("User already exists or service error.")
+    }).describe("A user with the provided email already exists, or a conflict occurred during account creation."),
   }
 }

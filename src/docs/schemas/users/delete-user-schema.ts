@@ -2,8 +2,8 @@ import z from "zod";
 
 export const deleteUserSchema = {
   tags: ["user"],
-  description: "Delete a registered user by their ID",
-  summary: "Delete a unique user by thier ID",
+  summary: "Delete a user by ID",
+  description: "Removes a registered user from the system using their unique identifier (ID). Requires authentication.",
   security: [
     {
       bearerAuth: [],
@@ -12,9 +12,9 @@ export const deleteUserSchema = {
   response: {
     200: z.object({
       message: z.string(),
-    }).describe("Deleted user data successfully."),
+    }).describe("User successfully deleted."),
     400: z.object({
       error: z.string(),
-    }).describe("User id is missing or error when trying to delete user."),
-  }
+    }).describe("Invalid or missing user ID, or an error occurred while attempting to delete the user."),
+  },
 }

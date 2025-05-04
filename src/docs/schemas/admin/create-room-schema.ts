@@ -13,8 +13,8 @@ const serviceErrorSchema = z.object({
 
 export const createRoomSchema = {
   tags: ["admin"],
-  summary: "Create new room",
-  description: "Creates a new room only by admins.",
+  summary: "Create a new room",
+  description: "Allows admins to create a new room with the provided details. Only accessible to users with admin privileges.",
   security: [
     {
       bearerAuth: [],
@@ -22,18 +22,18 @@ export const createRoomSchema = {
   ],
   body: z.object({
     name: z.string()
-      .min(2, { message: "The room name doesn't meet the minimum number of characters (2)." })
-      .max(255, { message: "The room name has exceeded the character limit (255)." })
+      .min(2, { message: "The room name must be at least 2 characters long." })
+      .max(255, { message: "The room name must not exceed 255 characters." })
       .refine((value) => /^[\w\s-]+$/.test(value), { message: "Room name can only contain letters, numbers, spaces, underscores, and hyphens." })
-      .describe("Room name - unique in system."),
+      .describe("The unique name of the room within the system."),
     description: z.string()
-      .min(2, { message: "The room description doesn't meet the minimum number of characters (2)." })
-      .max(2500, { message: "The room description has exceeded the character limit (2500)." })
-      .describe("Room description - provide detailed information about the room."),
+      .min(2, { message: "The room description must be at least 2 characters long." })
+      .max(2500, { message: "The room description must not exceed 2500 characters." })
+      .describe("A detailed description of the room, including its features and usage."),
     location: z.string()
-      .min(2, { message: "The room location doesn't meet the minimum number of characters (2)." })
-      .max(255, { message: "The room location has exceeded the character limit (255)." })
-      .describe("Room location - specify where the room is located. This can be a common address or a specific location within a building or department."),
+      .min(2, { message: "The room location must be at least 2 characters long." })
+      .max(255, { message: "The room location must not exceed 255 characters." })
+      .describe("The location of the room, either a general address or a specific area within a building."),
   }),
   response: {
     201: z.object({
@@ -53,16 +53,16 @@ export const createRoomSchema = {
         createdAt: z.date(),
         updatedAt: z.date(),
       }),
-    }).describe("Created room data successfully."),
+    }).describe("Room created successfully with the provided details."),
     400: z.union([
-      validationErrorSchema.describe("Validation error - input data does not match schema."),
-      serviceErrorSchema.describe("Service error - possible business logic issue."),
-    ]).describe("Error validating fields or business logic error"),
+      validationErrorSchema.describe("Input validation failed due to incorrect or missing data."),
+      serviceErrorSchema.describe("A business logic error occurred during room creation."),
+    ]).describe("Error caused by invalid input or business logic failure."),
     401: z.object({
       message: z.string(),
-    }).describe("Unauthorized"),
+    }).describe("Unauthorized access - valid authentication required."),
     403: z.object({
       error: z.string(),
-    }).describe("Do not have permission to perform the operation (Not a admin or any other role to perform the operation)."),
-  }
+    }).describe("Forbidden access - insufficient permissions to perform this action (only admins can create rooms)."),
+  },
 }

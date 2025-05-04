@@ -2,11 +2,11 @@ import z from "zod";
 
 export const findUserSchema = {
   tags: ["user"],
-  description: "Find a registered user by their ID",
-  summary: "Find a unique user by thier ID",
+  summary: "Retrieve a user by their unique ID",
+  description: "Fetches a registered user's details using their unique ID. Requires a valid user ID in the query string.",
   querystring: z.object({
     id: z.string(),
-  }).describe("Required to can find the user on database."),
+  }).describe("User's unique identifier (ID) used to fetch the user from the database."),
   response: {
     200: z.object({
       user: z.object({
@@ -17,9 +17,9 @@ export const findUserSchema = {
         createdAt: z.date(),
         updatedAt: z.date(),
       }),
-    }).describe("Fetch user data successfully."),
+    }).describe("Successfully retrieved user data."),
     400: z.object({
       error: z.string(),
-    }).describe("Failed due missing id or if user does not exists/cannot be found."),
+    }).describe("Invalid or missing user ID, or user not found."),
   }
 }
