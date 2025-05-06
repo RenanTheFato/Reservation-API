@@ -16,7 +16,7 @@ export class DeleteUserController{
       const deleteService = new DeleteUserService()
       await deleteService.execute({ id })
       logger.success(`User successfully deleted. ID of the user who was deleted: ${id}`)
-      return rep.status(200).send({ message: "User successfully deleted" })
+      return rep.status(204)
     } catch (error: any) {
       logger.error(`Error when trying to deleted the user: ${error.message}`)
       return rep.status(400).send({ error: error.message })
