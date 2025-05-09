@@ -10,7 +10,7 @@ export const deleteUserSchema = {
     },
   ],
   response: {
-    204: z.object({}),
+    204: z.object({}).describe("Deleted successful, no content on response."),
     400: z.object({
       error: z.string(),
     }).describe("Invalid or missing user ID, or an error occurred while attempting to delete the user."),
