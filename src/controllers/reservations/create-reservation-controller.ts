@@ -1,8 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { logger } from "../../utils/logger";
-import { Room } from "../../interfaces/room-interface";
 import z from "zod";
 import dayjs from "dayjs";
+import { CreateReservationService } from "../../services/reservations/create-reservation-service";
+import { Reservation } from "@prisma/client";
 
 export class CreateReservationController {
   async handle(req: FastifyRequest, rep: FastifyReply) {
@@ -14,9 +15,9 @@ export class CreateReservationController {
       return rep.status(400).send({ error: "User ID is missing" })
     }
 
-    const roomId = req.params as Pick<Room, 'id'>
+    const { roomId } = req.params as Pick<Reservation, 'roomId'>
 
-    if (!roomId) {
+    if (!roomId || roomId === '') {
       logger.warn("The room ID is missing or is empty.")
       return rep.status(400).send({ error: "The room ID is missing or is empty" })
     }
@@ -52,9 +53,13 @@ export class CreateReservationController {
     }
 
     try {
-      
-    } catch (error) {
-      
+      const createReservationService = new CreateReservationService()
+      const reservation = await createReservationService.execute({ userId, roomId, startTime: startTime.toDate(), endTime: endTime.toDate() })
+      logger.success("Reservation completed successful.")
+      return rep.status(201).send({ message: "Reservation completed successful", reservation })
+    } catch (error: any) {
+      logger.error(`Error on complete the reservation: ${error.message}`)
+      return rep.status(400).send({ error: error.message })
     }
 
   }
