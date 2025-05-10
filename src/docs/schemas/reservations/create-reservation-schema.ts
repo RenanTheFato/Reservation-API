@@ -14,7 +14,7 @@ const serviceErrorSchema = z.object({
 
 export const createReservationSchema = {
   tags: ["reservations"],
- summary: "Create a new room reservation",
+  summary: "Create a new room reservation",
   description: "Allows an authenticated user to create a reservation for a specific room by providing the desired start and end times. The times must follow the format YYYY/MM/DD HH:mm.",
   security: [
     {

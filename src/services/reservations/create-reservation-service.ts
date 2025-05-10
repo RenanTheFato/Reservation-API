@@ -1,5 +1,7 @@
 import { Reservation } from "@prisma/client";
 import { prisma } from "../../config/prisma";
+import { reservationQueue } from "../../jobs/queues/reservation-queues";
+import dayjs from "dayjs";
 
 export class CreateReservationService {
   async execute({ userId, roomId, startTime, endTime }: Pick<Reservation, 'userId' | 'roomId' | 'startTime' | 'endTime'>) {
@@ -44,6 +46,12 @@ export class CreateReservationService {
       data: {
         status: "IN_USE",
       },
+    })
+
+    await reservationQueue.add("release-room", {
+      roomId,
+    }, {
+      delay: dayjs(endTime).diff(new Date())
     })
 
     return reservation
