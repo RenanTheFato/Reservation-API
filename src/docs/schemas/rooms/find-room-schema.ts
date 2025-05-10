@@ -15,14 +15,14 @@ export const findRoomSchema = {
     200: z.object({
       rooms: z.array(
         z.object({
-          id: z.string(),
-          name: z.string(),
-          description: z.string(),
-          location: z.string(),
-          status: z.string(),
-          createdAt: z.date(),
-          updatedAt: z.date()
-        })
+        id: z.string().describe("Unique identifier for the room"),
+        name: z.string().describe("Name of the room"),
+        description: z.string().describe("Detailed description of the room"),
+        location: z.string().describe("Physical or logical location of the room"),
+        status: z.string().describe("Current status of the room (e.g., available, occupied)"),
+        createdAt: z.date().describe("Date and time the room was created"),
+        updatedAt: z.date().describe("Date and time the room was last updated"),
+        }),
       ),
     }).describe("Rooms retrieved successfully based on the provided filters."),
     400: z.object({
