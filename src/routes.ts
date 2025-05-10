@@ -21,6 +21,7 @@ import { DeleteRoomController } from "./controllers/rooms/admin/delete-room-cont
 import { deleteRoomSchema } from "./docs/schemas/admin/delete-room-schema";
 import { CreateReservationController } from "./controllers/reservations/create-reservation-controller";
 import { createReservationSchema } from "./docs/schemas/reservations/create-reservation-schema";
+import { GetReservationController } from "./controllers/reservations/get-reservation-controller";
 
 export async function routes(fastify: FastifyTypedInstance) {
   fastify.post("/create-user", { schema: createUserSchema }, async (req: FastifyRequest, rep: FastifyReply) => {
@@ -45,6 +46,10 @@ export async function routes(fastify: FastifyTypedInstance) {
 
   fastify.post("/create-reservation/:roomId", { preHandler: [authentication], schema: createReservationSchema }, async(req: FastifyRequest, rep: FastifyReply) => {
     return new CreateReservationController().handle(req, rep)
+  })
+
+  fastify.get("/get-reservations", { preHandler: [authentication]}, async(req: FastifyRequest, rep: FastifyReply) => {
+    return new GetReservationController().handle(req, rep)
   })
 
   fastify.get("/admin/list-all-users", { preHandler: [authentication, checkAdmin] }, async (req: FastifyRequest, rep: FastifyReply) => {
