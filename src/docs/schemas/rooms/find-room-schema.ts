@@ -19,7 +19,7 @@ export const findRoomSchema = {
         name: z.string().describe("Name of the room"),
         description: z.string().describe("Detailed description of the room"),
         location: z.string().describe("Physical or logical location of the room"),
-        status: z.string().describe("Current status of the room (e.g., available, occupied)"),
+        status: z.string().describe("Current status of the room"),
         createdAt: z.date().describe("Date and time the room was created"),
         updatedAt: z.date().describe("Date and time the room was last updated"),
         }),
