@@ -2,15 +2,15 @@ import z from "zod";
 import { Status } from "../../../interfaces/room-interface";
 
 const validationErrorSchema = z.object({
-  statusCode: z.literal(400),
-  code: z.string(),
-  error: z.literal("Bad Request"),
-  message: z.string(),
-})
+  statusCode: z.literal(400).describe("HTTP status code indicating a bad request."),
+  code: z.string().describe("Application-specific error code."),
+  error: z.literal("Bad Request").describe("Standard HTTP error label."),
+  message: z.string().describe("Human-readable explanation of the validation error."),
+}).describe("Validation error — body or parameters did not meet the expected format.")
 
 const serviceErrorSchema = z.object({
-  error: z.string(),
-})
+  error: z.string().describe("Message describing the business logic error."),
+}).describe("Service-level error — e.g., business rule violation or room already exists.")
 
 export const patchRoomSchema = {
   tags: ["admin"],
@@ -28,7 +28,9 @@ export const patchRoomSchema = {
     name: z.string()
       .min(2, { message: "The room name must have at least 2 characters." })
       .max(255, { message: "The room name must have a maximum of 255 characters." })
-      .refine((value) => /^[\w\s-]+$/.test(value), { message: "The room name may only contain letters, numbers, spaces, underscores, and hyphens.", })
+      .refine((value) => /^[\w\s-]+$/.test(value), {
+        message: "The room name may only contain letters, numbers, spaces, underscores, and hyphens.",
+      })
       .optional()
       .describe("New name for the room. Optional, but must follow format rules if provided."),
     description: z.string()
@@ -49,30 +51,30 @@ export const patchRoomSchema = {
     200: z.object({
       message: z.string().describe("Success message."),
       room: z.object({
-        id: z.string(),
-        name: z.string(),
-        description: z.string(),
-        location: z.string(),
-        status: z.string(),
-        createdAt: z.date(),
-        updatedAt: z.date(),
+        id: z.string().describe("Unique identifier of the room."),
+        name: z.string().describe("Name of the room."),
+        description: z.string().describe("Description of the room."),
+        location: z.string().describe("Location of the room."),
+        status: z.string().describe("Current status of the room."),
+        createdAt: z.date().describe("Timestamp when the room was created."),
+        updatedAt: z.date().describe("Timestamp of the last room update."),
       }).describe("Updated room object."),
       admin: z.object({
-        adminId: z.string(),
-        adminName: z.string(),
-        adminEmail: z.string(),
-        adminRole: z.string(),
+        adminId: z.string().describe("ID of the admin who updated the room."),
+        adminName: z.string().describe("Name of the admin."),
+        adminEmail: z.string().describe("Email address of the admin."),
+        adminRole: z.string().describe("Role of the admin."),
       }).describe("Admin user who performed the operation."),
     }).describe("Room updated successfully — returns the updated room and admin information."),
     400: z.union([
-      validationErrorSchema.describe("Validation error — body or params did not meet the expected format."),
-      serviceErrorSchema.describe("Service-level error — e.g., business logic failed or room name already exists.")
+      validationErrorSchema,
+      serviceErrorSchema,
     ]).describe("Bad Request — the request body is invalid, missing required fields, or contains business rule violations."),
     401: z.object({
-      message: z.string(),
+      message: z.string().describe("Message indicating that authentication is required."),
     }).describe("Unauthorized — valid authentication credentials are required."),
     403: z.object({
-      error: z.string(),
+      error: z.string().describe("Error message indicating lack of permission."),
     }).describe("Forbidden — only admins are allowed to update room data."),
-  }
+  },
 }

@@ -1,15 +1,15 @@
 import z from "zod";
 
 const validationErrorSchema = z.object({
-  statusCode: z.literal(400),
-  code: z.string(),
-  error: z.literal("Bad Request"),
-  message: z.string(),
-})
+  statusCode: z.literal(400).describe("The HTTP status code for a bad request."),
+  code: z.string().describe("A specific error code indicating the validation issue."),
+  error: z.literal("Bad Request").describe("Standard HTTP error label."),
+  message: z.string().describe("Detailed explanation of the validation error."),
+}).describe("Input validation failed due to incorrect or missing data.")
 
 const serviceErrorSchema = z.object({
-  error: z.string(),
-})
+  error: z.string().describe("Message describing the service-level error."),
+}).describe("A business logic error occurred during room creation.")
 
 export const createRoomSchema = {
   tags: ["admin"],
@@ -24,7 +24,7 @@ export const createRoomSchema = {
     name: z.string()
       .min(2, { message: "The room name must be at least 2 characters long." })
       .max(255, { message: "The room name must not exceed 255 characters." })
-      .refine((value) => /^[\w\s-]+$/.test(value), { message: "Room name can only contain letters, numbers, spaces, underscores, and hyphens." })
+      .refine((value) => /^[\w\s-]+$/.test(value), { message: "Room name can only contain letters, numbers, spaces, underscores, and hyphens.",})
       .describe("The unique name of the room within the system."),
     description: z.string()
       .min(2, { message: "The room description must be at least 2 characters long." })
@@ -37,32 +37,32 @@ export const createRoomSchema = {
   }),
   response: {
     201: z.object({
-      message: z.string(),
+      message: z.string().describe("Success message confirming room creation."),
       admin: z.object({
-        adminId: z.string(),
-        adminName: z.string(),
-        adminEmail: z.string(),
-        adminRole: z.string(),
-      }),
+        adminId: z.string().describe("Unique identifier of the admin who created the room."),
+        adminName: z.string().describe("Name of the admin."),
+        adminEmail: z.string().describe("Email address of the admin."),
+        adminRole: z.string().describe("Role or permission level of the admin."),
+      }).describe("Details of the admin who performed the creation."),
       room: z.object({
-        id: z.string(),
-        name: z.string(),
-        description: z.string(),
-        location: z.string(),
-        status: z.string(),
-        createdAt: z.date(),
-        updatedAt: z.date(),
-      }),
+        id: z.string().describe("Unique identifier of the newly created room."),
+        name: z.string().describe("Name of the room."),
+        description: z.string().describe("Description of the room."),
+        location: z.string().describe("Location of the room."),
+        status: z.string().describe("Current status of the room."),
+        createdAt: z.date().describe("Date and time the room was created."),
+        updatedAt: z.date().describe("Date and time of the last update."),
+      }).describe("Information about the newly created room."),
     }).describe("Room created successfully with the provided details."),
     400: z.union([
-      validationErrorSchema.describe("Input validation failed due to incorrect or missing data."),
-      serviceErrorSchema.describe("A business logic error occurred during room creation."),
+      validationErrorSchema,
+      serviceErrorSchema,
     ]).describe("Error caused by invalid input or business logic failure."),
     401: z.object({
-      message: z.string(),
+      message: z.string().describe("Message indicating the user is not authenticated."),
     }).describe("Unauthorized access - valid authentication required."),
     403: z.object({
-      error: z.string(),
+      error: z.string().describe("Message indicating the user lacks necessary permissions."),
     }).describe("Forbidden access - insufficient permissions to perform this action (only admins can create rooms)."),
   },
 }
