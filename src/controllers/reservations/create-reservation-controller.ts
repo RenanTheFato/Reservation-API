@@ -18,13 +18,17 @@ export class CreateReservationController {
     const { roomId } = req.params as Pick<Reservation, 'roomId'>
 
     if (!roomId || roomId === '') {
-      logger.warn("The room ID is missing or is empty.")
-      return rep.status(400).send({ error: "The room ID is missing or is empty" })
+      logger.warn("The room ID is missing or empty.")
+      return rep.status(400).send({ error: "The room ID is missing or empty" })
     }
 
     const validateReservationSchema = z.object({
-      start_time: z.string().refine((value) => dayjs(value, "YYYY/MM/DD HH:mm", true).isValid(), { message: "start_time must be in format YYYY/MM/DD HH:mm" }),
-      end_time: z.string().refine((value) => dayjs(value, "YYYY/MM/DD HH:mm", true).isValid(), { message: "end_time must be in format YYYY/MM/DD HH:mm" }),
+      start_time: z.string()
+        .refine((value) => dayjs(value, "YYYY/MM/DD HH:mm", true)
+        .isValid(), { message: "start_time must be in format YYYY/MM/DD HH:mm" }),
+      end_time: z.string()
+        .refine((value) => dayjs(value, "YYYY/MM/DD HH:mm", true)
+        .isValid(), { message: "end_time must be in format YYYY/MM/DD HH:mm" }),
     })
 
     const { start_time, end_time } = req.body as z.infer<typeof validateReservationSchema>
@@ -39,7 +43,7 @@ export class CreateReservationController {
           path: err.path.join("/"),
         }))
 
-        logger.error("Validation error when creating a reservation: Data does not match the requirements.")
+        logger.error("Validation error while creating a reservation: Data does not meet the requirements.")
         return rep.status(400).send({ statusCode: 400, code: errors[0].code, error: "Bad Request", message: errors[0].message })
       }
     }
@@ -55,10 +59,10 @@ export class CreateReservationController {
     try {
       const createReservationService = new CreateReservationService()
       const reservation = await createReservationService.execute({ userId, roomId, startTime: startTime.toDate(), endTime: endTime.toDate() })
-      logger.success("Reservation completed successful.")
-      return rep.status(201).send({ message: "Reservation completed successful", reservation })
+      logger.success("Reservation completed successfully.")
+      return rep.status(201).send({ message: "Reservation completed successfully", reservation })
     } catch (error: any) {
-      logger.error(`Error on complete the reservation: ${error.message}`)
+      logger.error(`Error while completing the reservation: ${error.message}`)
       return rep.status(400).send({ error: error.message })
     }
 

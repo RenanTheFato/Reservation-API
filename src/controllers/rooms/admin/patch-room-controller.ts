@@ -66,8 +66,8 @@ export class PatchRoomController {
 
       const patchRoomService = new PatchRoomService()
       const roomHasPatch = await patchRoomService.execute({ id, name, description, location, status })
-      logger.success(`Room patched successful. Patched by ${JSON.stringify(admin)}. New Room Data: ${JSON.stringify(roomHasPatch)}`)
-      return rep.status(200).send({ message: "Room patched successful", room: roomHasPatch, admin: admin})
+      logger.success(`Room patched successfully. Patched by ${JSON.stringify(admin)}. New Room Data: ${JSON.stringify(roomHasPatch)}`)
+      return rep.status(200).send({ message: "Room patched successfully", room: roomHasPatch, admin: admin})
     } catch (error: any) {
       logger.error(`Room cannot be patched due a error: ${error.message}`)
       return rep.status(400).send({ error: error.message })

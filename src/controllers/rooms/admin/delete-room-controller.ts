@@ -24,7 +24,7 @@ export class DeleteRoomController {
 
       const deleteRoomService = new DeleteRoomService()
       await deleteRoomService.execute({ id })
-      logger.success(`Room with ID ${id} has been deleted successful. Deleted by ${JSON.stringify(admin)}.`)
+      logger.success(`Room with ID ${id} has been deleted successfully. Deleted by ${JSON.stringify(admin)}.`)
       return rep.status(204).send()
     } catch (error: any) {
       logger.error(`Error when trying to deleted the room: ${error.message}`)
