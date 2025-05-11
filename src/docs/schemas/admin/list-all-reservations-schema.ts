@@ -2,8 +2,8 @@ import z from "zod";
 
 export const listAllReservationsSchema = {
   tags: ["admin"],
-summary: "List all room reservations",
-description: "Retrieves a list of all room reservations available in the system. Only users with administrative privileges are authorized to access this endpoint. Each returned room includes details such as its unique ID, name, description, location, status, and timestamps for creation and last update.",
+  summary: "List all room reservations",
+  description: "Retrieves a list of all room reservations available in the system. Only users with administrative privileges are authorized to access this endpoint. Each returned room includes details such as its unique ID, name, description, location, status, and timestamps for creation and last update.",
   security: [
     {
       bearerAuth: []

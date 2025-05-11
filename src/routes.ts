@@ -27,6 +27,7 @@ import { listAllRoomsSchema } from "./docs/schemas/rooms/list-all-rooms-schema";
 import { ListAllReservationsController } from "./controllers/reservations/admin/list-all-reservations-controller";
 import { listAllReservationsSchema } from "./docs/schemas/admin/list-all-reservations-schema";
 import { getReservationsSchema } from "./docs/schemas/reservations/get-reservations-schema";
+import { listAllUsersSchema } from "./docs/schemas/admin/list-all-users-schema";
 
 export async function routes(fastify: FastifyTypedInstance) {
   fastify.post("/create-user", { schema: createUserSchema }, async (req: FastifyRequest, rep: FastifyReply) => {
@@ -61,7 +62,7 @@ export async function routes(fastify: FastifyTypedInstance) {
     return new GetReservationController().handle(req, rep)
   })
 
-  fastify.get("/admin/list-all-users", { preHandler: [authentication, checkAdmin] }, async (req: FastifyRequest, rep: FastifyReply) => {
+  fastify.get("/admin/list-all-users", { preHandler: [authentication, checkAdmin], schema: listAllUsersSchema }, async (req: FastifyRequest, rep: FastifyReply) => {
     return new ListAllUsersController().handle(req, rep)
   })
 
