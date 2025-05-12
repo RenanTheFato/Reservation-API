@@ -36,6 +36,9 @@ async function start() {
   })
   await server.register(fastifySwaggerUi, {
     routePrefix: '/docs',
+    theme: {
+      title: 'Reservation Api Docs',
+    },
   })
   await server.register(routes)
 
