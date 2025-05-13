@@ -28,6 +28,7 @@ import { ListAllReservationsController } from "./controllers/reservations/admin/
 import { listAllReservationsSchema } from "./docs/schemas/admin/list-all-reservations-schema";
 import { getReservationsSchema } from "./docs/schemas/reservations/get-reservations-schema";
 import { listAllUsersSchema } from "./docs/schemas/admin/list-all-users-schema";
+import { userInfoSchema } from "./docs/schemas/users/user-info-schema";
 
 export async function routes(fastify: FastifyTypedInstance) {
   fastify.post("/create-user", { schema: createUserSchema }, async (req: FastifyRequest, rep: FastifyReply) => {
@@ -35,6 +36,10 @@ export async function routes(fastify: FastifyTypedInstance) {
   })
 
   fastify.get("/find-user", { schema: findUserSchema }, async (req: FastifyRequest, rep: FastifyReply) => {
+    return new GetUserController().handle(req, rep)
+  })
+
+  fastify.get("/user-info", { preHandler: [authentication] , schema: userInfoSchema }, async (req: FastifyRequest, rep: FastifyReply) => {
     return new GetUserController().handle(req, rep)
   })
 
