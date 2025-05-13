@@ -5,15 +5,12 @@ services:
     ports:
       - "${PORT:-3333}:${PORT:-3333}"
     env_file:
-      - .env
+      - .env.production
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-reservations}?schema=public
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-    volumes:
-      - ./src:/app/src
-      - ./prisma:/app/prisma
     depends_on:
       postgres:
         condition: service_healthy
@@ -21,14 +18,14 @@ services:
         condition: service_healthy
     networks:
       - app-network
-    restart: unless-stopped
-    command: sh -c "npx prisma migrate deploy && npm run dev"
+    restart: always
+    command: sh -c "npx prisma migrate deploy && npm start"
 
   postgres:
     image: postgres:15
     container_name: reservation-postgres
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
@@ -39,26 +36,26 @@ services:
       - app-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
       retries: 5
-    restart: unless-stopped
+    restart: always
 
   redis:
     image: redis:7
     container_name: reservation-redis
-    ports:
-      - "6379:6379"
+    expose:
+      - "6379"
     volumes:
       - redis-data:/data
     networks:
       - app-network
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
       retries: 5
-    restart: unless-stopped
+    restart: always
 
 networks:
   app-network:
