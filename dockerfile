@@ -14,7 +14,7 @@ WORKDIR /app
 
 COPY package*.json ./
 RUN npm ci --only=production
-RUN npm install chalk@4.1.2 --save
+RUN npm install chalk@4.1.2 --save-exact --force
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
